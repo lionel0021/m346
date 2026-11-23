@@ -1,0 +1,27 @@
+#cloud-config
+users: # Configure user accounts.
+  - default # Keep the default Ubuntu user.
+  - name: lionel # Create the user lionel.
+    ssh_authorized_keys: # Allow login with the lionel1 public key.
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDY/jOvz9scTRkL5BhE6a8yBBYgQYst8WV50k6knvxTrkbZ1sOoy7f4YOh4KNAVpfgLnJTFvEsNW+sjDa+qm88XWXwAcaYLlzuF2eynPL5rGo2ePjWqR8GCcrKuEAB86Cxg8Pf1w+p4vXqtN+A0fE/4j2b4BK2Nz/e8E4fEeF+iArAKL4PZ4BVWHAhkrCBYFHfJq0vkaLclCtBkWI1bXGE96BTCBQnirHZQYD/BQt0+C4VQGEfsfzcb48ZyJDxP84Hg68JnpQ63/Yg5KnK04BjCpmoNI9qJmrWOuC23Gsne2suvuLXcvhAn3Elw3Bxt9XvOMe4OmiUNs9WyYnDMVA/3
+    shell: /bin/bash # Use Bash as the login shell.
+    sudo: ALL=(ALL) NOPASSWD:ALL # Allow this user to run sudo without a password.
+    groups: sudo # Add the user to the sudo group.
+package_update: true # Refresh package lists before installation.
+packages: # Install the following packages.
+  - fastfetch # Display system information.
+  - tree # Display directory structures.
+  - jq # Process JSON data as the additional package.
+write_files: # Create files during the first boot.
+  - path: /home/ubuntu/greeting.txt # Set the path of the greeting file.
+    # The following two lines are the literal contents of the greeting file.
+    content: | # Write the indented lines as text, preserving line breaks.
+      This file was created by cloud-init.
+      Nobody created it manually.
+  - path: /home/ubuntu/kn01-info.txt # Set the path of the additional file.
+    # The next line is the literal content of the additional file.
+    content: | # Write the indented line as text.
+      KN01: This VM was configured with cloud-init.
+runcmd: # Run these commands during the first boot.
+  - echo "Installation completed on $(date)" >> /home/ubuntu/greeting.txt # Append the completion time.
+  - echo "My custom command was executed" > /home/ubuntu/kn01-proof.txt # Create proof that the custom command ran.
